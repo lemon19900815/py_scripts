@@ -9,26 +9,24 @@ import os
 import sys  
 import traceback
 import util
+import types
 
 paramiko = util.import_help('paramiko')
 
 # 新ssh连接
-def ssh_connect(ssh_conf):
+def __ssh_connect(ssh_conf):
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(ssh_conf['host'], ssh_conf['port'], ssh_conf['user'], ssh_conf['passwd'])
     return ssh
 
 # 关闭连接
-def ssh_disconnect(client):
+def __ssh_disconnect(client):
     client.close()
 
-# windows客户端远程执行linux服务器上命令 
-def exec_cmd(ssh_conf, command):
-    # 创建连接
-    ssh = ssh_connect(ssh_conf)
-
-    stdin, stdout, stderr = ssh.exec_command(command)
+# 单一ssh命令
+def __ssh_command(ssh, cmd):
+    stdin, stdout, stderr = ssh.exec_command(cmd)
     err = stderr.readlines()
     out = stdout.readlines()
 
@@ -36,9 +34,22 @@ def exec_cmd(ssh_conf, command):
         [print(i.rstrip('\n')) for i in err]
     else:
         [print(i.rstrip('\n')) for i in out]
+
+# windows客户端远程执行linux服务器上命令 
+def exec_cmd(ssh_conf, command):
+    # 创建连接
+    ssh = __ssh_connect(ssh_conf)
+
+    if type(command) == type([]):
+        for cmd in command:
+            __ssh_command(ssh, cmd)
+    elif type(command) == type(''):
+        __ssh_command(ssh, command)
+    else:
+        print('not support commond type: ', type(command))
         
     # 关闭连接
-    ssh_disconnect(ssh)
+    __ssh_disconnect(ssh)
 
 '''从Linux服务器下载文件到本地
 
