@@ -11,16 +11,16 @@ import tarfile
 import traceback
 
 def is_endswith(s, items):
-	for item in items:
-		if s.endswith(item):
-			return True
-	return False
+    for item in items:
+        if s.endswith(item):
+            return True
+    return False
 
 def is_startswith(s, items):
-	for item in items:
-		if s.startswith(item):
-			return True
-	return False
+    for item in items:
+        if s.startswith(item):
+            return True
+    return False
 
 # 加载json配置
 def load_json_conf(filename):
@@ -44,19 +44,19 @@ def make_targz(output_filename, source_dir):
 
 # 交互式等待输入选项卡内容
 def interactive_input(options):
-	opt_list = [opt for opt in options]
+    opt_list = [opt for opt in options]
 
-	while True:
-		for i, opt in enumerate(opt_list):
-			print(i, opt)
-		try:
-			seqno = input('输入序号: ')
-			seqno = int(seqno)
-			if seqno >= len(opt_list):
-				print('无效序号：', seqno)
-				continue
-			return opt_list[seqno]
-		except:
-			print('序号错误：', seqno)
-			traceback.print_exc()
-	return None
+    while True:
+        for i, opt in enumerate(opt_list):
+            print(i, opt)
+        try:
+            seqno = input('输入序号: ')
+            seqno = int(seqno)
+            if seqno >= len(opt_list):
+                print('无效序号：', seqno)
+                continue
+            return opt_list[seqno]
+        except:
+            print('序号错误：', seqno)
+            traceback.print_exc()
+    return None
