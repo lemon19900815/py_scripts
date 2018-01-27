@@ -4,7 +4,6 @@
 """
 工具类
 """
-import shutil
 import os,sys
 import traceback
 import json
@@ -20,24 +19,12 @@ def create_connection(conf):
     return connection
 
 # 执行sql
-def execute_sql(conn, sql):
+# mysql_conf = {'user': , 'host': , 'database':}
+def mysql_execute_sql(mysql_conf, sql):
+    conn = create_connection(mysql_conf)
     cursor = conn.cursor()
     cursor.execute(sql)
 
     conn.commit()
     cursor.close()
-
-# 刷新表数据
-def refresh_all_table(remote_info):
-    conn = create_connection(remote_info)
-    sql_ops = ['delete', 'insert', 'update']
-
-    for op in sql_ops:
-        sql_dir = os.path.join(os.curdir, '..', 'sql')
-        sql_op_dir = os.path.join(sql_dir, op)
-        if not os.path.exists(sql_op_dir):
-            continue
-        sql_files = os.listdir(sql_op_dir)
-        for filename in sql_files:
-            file = open(os.path.join(sql_op_dir, filename), 'rb')
-            execute_sql(conn, file.read())
+    conn.close()
