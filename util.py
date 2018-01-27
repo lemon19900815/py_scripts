@@ -4,9 +4,7 @@
 """
 工具类
 """
-import shutil
 import os,sys
-import filecmp
 import json
 import codecs
 import tarfile
