@@ -27,8 +27,8 @@ def __ssh_disconnect(client):
 # 单一ssh命令
 def __ssh_command(ssh, cmd):
     stdin, stdout, stderr = ssh.exec_command(cmd)
-    err = stderr.readlines()
-    out = stdout.readlines()
+    err = [line for line in stderr]
+    out = [line for line in stdout]
 
     if len(err) > 0:
         [print(i.rstrip('\n')) for i in err]
@@ -47,7 +47,7 @@ def exec_cmd(ssh_conf, command):
         __ssh_command(ssh, command)
     else:
         print('not support commond type: ', type(command))
-        
+
     # 关闭连接
     __ssh_disconnect(ssh)
 
