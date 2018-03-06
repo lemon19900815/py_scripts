@@ -27,6 +27,13 @@ def __ssh_disconnect(client):
 # 单一ssh命令
 def __ssh_command(ssh, cmd):
     stdin, stdout, stderr = ssh.exec_command(cmd)
+    err = stderr.read().decode('utf8', 'ignore')
+    out = stdout.read().decode('utf8', 'ignore')
+    if len(err) > 0:
+        print(err)
+    else:
+        print(out)
+    '''
     err = [line for line in stderr]
     out = [line for line in stdout]
 
@@ -34,6 +41,7 @@ def __ssh_command(ssh, cmd):
         [print(i.rstrip('\n')) for i in err]
     else:
         [print(i.rstrip('\n')) for i in out]
+    '''
 
 # windows客户端远程执行linux服务器上命令 
 def exec_cmd(ssh_conf, command):
